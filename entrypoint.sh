@@ -15,7 +15,7 @@ else
     echo "[WARNING] Tabel PowerDNS belum ada! Memulai pemasangan skema otomatis..."
     
     # Download skema resmi PowerDNS terbaru dari official repository
-    curl -sSL https://githubusercontent.com -o /tmp/schema.sql
+    curl -sSL https://raw.githubusercontent.com/PowerDNS/pdns/master/modules/gmysqlbackend/schema.mysql.sql -o /tmp/schema.sql
     
     # Import skema ke MySQL user
     mysql -h "${MYSQL_HOST}" -P "${MYSQL_PORT}" -u "${MYSQL_USER}" -p"${MYSQL_PASSWORD}" -D "${MYSQL_DB}" < /tmp/schema.sql
