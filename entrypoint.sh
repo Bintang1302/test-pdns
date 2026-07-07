@@ -86,7 +86,7 @@ rm -f "$PIPE_INPUT"
 mkfifo "$PIPE_INPUT"
 
 # Jalankan PowerDNS di background menggunakan konfigurasi global agar hak akses modul konsisten
-/usr/sbin/pdns_server --daemon=no --config-dir=/home/container/etc/pdns.conf &
+/usr/sbin/pdns_server --daemon=no --config-dir=/home/container/etc &
 PDNS_PID=$!
 
 # Fungsi untuk membersihkan proses jika server dimatikan panel
