@@ -54,16 +54,16 @@ EOF
 fi
 
 echo "====== MEMERIKSA DATABASE ======"
-TABLE_CHECK=$(mysql -h "${MYSQL_HOST}" -P "${MYSQL_PORT}" -u "${MYSQL_USER}" -p"${MYSQL_PASSWORD}" -D "${MYSQL_DB}" -e "SHOW TABLES LIKE 'domains';" -s -N 2>/dev/null)
+TABLE_CHECK=$(mysql -h "${MYSQL_HOST}" -P "${MYSQL_PORT}" -u "${MYSQL_USER}" -p"${MYSQL_PASSWORD}" -D "${MYSQL_DB}" --skip-ssl -e "SHOW TABLES LIKE 'domains';" -s -N 2>/dev/null)
 
 if [ "$TABLE_CHECK" = "domains" ]; then
     echo "[INFO] Tabel PowerDNS sudah ditemukan di MySQL. SKIP import."
 else
     echo "[WARNING] Tabel PowerDNS kosong! Mengunduh skema otomatis..."
     
-    curl -sSL -f "$SCHEMA_URL" -o /tmp/schema.sql || curl -sSL https://raw.githubusercontent.com/PowerDNS/pdns/master/modules/gmysqlbackend/schema.mysql.sql -o /tmp/schema.sql
+    curl -sSL https://raw.githubusercontent.com/PowerDNS/pdns/master/modules/gmysqlbackend/schema.mysql.sql -o /tmp/schema.sql
 
-    mysql -h "${MYSQL_HOST}" -P "${MYSQL_PORT}" -u "${MYSQL_USER}" -p"${MYSQL_PASSWORD}" -D "${MYSQL_DB}" < /tmp/schema.sql
+    mysql -h "${MYSQL_HOST}" -P "${MYSQL_PORT}" -u "${MYSQL_USER}" -p"${MYSQL_PASSWORD}" -D "${MYSQL_DB}" --skip-ssl < /tmp/schema.sql
     
     if [ $? -eq 0 ]; then
         echo "[SUCCESS] Skema database berhasil dipasang!"
