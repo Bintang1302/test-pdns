@@ -61,12 +61,7 @@ if [ "$TABLE_CHECK" = "domains" ]; then
 else
     echo "[WARNING] Tabel PowerDNS kosong! Mengunduh skema otomatis..."
     
-    # Deteksi branch skema berdasarkan versi mayor yang terpasang (misal: auth-4.9.x)
-    MAJOR_BRANCH=$(echo "auth-$INSTALLED_VERSION" | cut -d. -f1-2)
-    SCHEMA_URL="https://githubusercontent.com{MAJOR_BRANCH}.x/modules/gmysqlbackend/schema.mysql.sql"
-    
-    # Fallback ke master jika rilis versi tidak ditemukan
-    curl -sSL -f $SCHEMA_URL -o /tmp/schema.sql || curl -sSL https://githubusercontent.com -o /tmp/schema.sql
+    curl -sSL -f "$SCHEMA_URL" -o /tmp/schema.sql || curl -sSL https://raw.githubusercontent.com/PowerDNS/pdns/master/modules/gmysqlbackend/schema.mysql.sql -o /tmp/schema.sql
 
     mysql -h "${MYSQL_HOST}" -P "${MYSQL_PORT}" -u "${MYSQL_USER}" -p"${MYSQL_PASSWORD}" -D "${MYSQL_DB}" < /tmp/schema.sql
     
@@ -85,8 +80,8 @@ PIPE_INPUT="/home/container/run/console.pipe"
 rm -f "$PIPE_INPUT"
 mkfifo "$PIPE_INPUT"
 
-# Jalankan PowerDNS di background menggunakan konfigurasi global agar hak akses modul konsisten
-/home/container/bin/pdns_server --daemon=no --config-dir=/home/container/etc
+# Jalankan PowerDNS di background menggunakan tanda & (Fixed background process)
+/home/container/bin/pdns_server --daemon=no --config-dir=/home/container/etc &
 PDNS_PID=$!
 
 # Fungsi untuk membersihkan proses jika server dimatikan panel
