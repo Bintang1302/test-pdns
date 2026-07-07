@@ -26,7 +26,8 @@ RUN mkdir -p /home/container /var/run/pdns /etc/pdns && \
 
 # 4. Atur lingkungan kerja sesuai standar Pterodactyl Wings
 USER container
-ENV USER=container HOME=/home/container WORKDIR /home/container
+ENV USER=container HOME=/home/container
+WORKDIR /home/container
 
 # 5. Eksekusi entrypoint kustom
 COPY ./entrypoint.sh /entrypoint.sh
