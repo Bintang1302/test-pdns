@@ -5,8 +5,7 @@ FROM alpine:3.20
 ARG PDNS_VERSION=""
 
 # 1. Tambahkan repositori edge untuk mendapatkan versi terbaru & install dependensi
-RUN echo "https://alpinelinux.org" >> /etc/apk/repositories && \
-    echo "https://alpinelinux.org" >> /etc/apk/repositories && \
+RUN echo "https://dl-cdn.alpinelinux.org/alpine/latest-stable/main" >> /etc/apk/repositories && \
     apk update && \
     # Jika PDNS_VERSION diisi, pasang versi spesifik. Jika kosong, pasang versi terbaru.
     if [ -z "$PDNS_VERSION" ]; then \
